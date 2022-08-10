@@ -12,9 +12,6 @@ spec:
   admin_password_secret: awx-admin-password
   ingress_type: Ingress
   ingress_tls_secret: awx-secret-tls
-#  ingress_annotations: |
-#      kubernetes.io/ingress.class: public
-#  postgres_storage_class: nfs-storageclass
   postgres_storage_requirements:
     requests:
       storage: 8Gi
