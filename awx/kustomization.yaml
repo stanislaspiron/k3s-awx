@@ -14,6 +14,16 @@ secretGenerator:
   - name: awx-admin-password
     literals:
       - password="admin@F5demo.com"
+
+  - name: awx-postgres-configuration
+    literals:
+      - host=awx-postgres-13
+      - port=5432
+      - database=awx
+      - username=awx
+      - password="adminPSQL@F5demo.com"
+      - type=managed
+
 resources:
   - awx.yml
 

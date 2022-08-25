@@ -4,7 +4,7 @@ kind: AWX
 metadata:
   name: awx
 spec:
-  hostname: awx-laptop.demo.local
+  hostname: awx-k3s.demo.local
   image: quay.io/ansible/awx
   image_version: latest
   image_pull_policy: Always
