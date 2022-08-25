@@ -77,6 +77,12 @@ kubectl kustomize awx-operator | kubectl apply -f -
 
 ### Install AWX
 
+Change current context to namespace awx:
+
+```
+kubectl config set-context --current --namespace=awx
+```
+
 Edit awx/kustomization.yaml file and change admin password and hostname.
 
 ```
@@ -86,7 +92,7 @@ Edit awx/kustomization.yaml file and change admin password and hostname.
 
 Create Certificate for HTTPS
 
-``
+```
 AWX_HOST="awx-k3s.demo.local"
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
 
