@@ -10,21 +10,12 @@ secretGenerator:
     files:
       - tls.crt
       - tls.key
+
   - name: awx-admin-password
-    type: Opaque
     literals:
       - password="admin@F5demo.com"
 resources:
-  # Find the latest tag here: https://github.com/ansible/awx-operator/releases
-  - github.com/ansible/awx-operator/config/default?ref=0.25.0
-#  - awx-tls-secret.yml
-#  - secret.yml
   - awx.yml
-
-# Set the image tags to match the git version from above
-images:
-  - name: quay.io/ansible/awx-operator
-    newTag: 0.25.0
 
 # Specify a custom namespace in which to install AWX
 namespace: awx
