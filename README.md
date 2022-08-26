@@ -72,7 +72,7 @@ namespace: awx
 Apply the installation
 
 ```
-kubectl kustomize awx-operator | kubectl apply -f -
+kubectl apply -k awx-operator
 ```
 
 ### Install AWX
@@ -95,6 +95,10 @@ Create Certificate for HTTPS
 ```
 AWX_HOST="awx-k3s.demo.local"
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
+```
 
-kubectl kustomize awx | kubectl apply -f -
+Apply AWX installation
+
+```
+kubectl apply -k awx
 ```
