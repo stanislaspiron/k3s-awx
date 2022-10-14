@@ -1,5 +1,7 @@
 # k3s-awx
 
+Note: some parts of this solution are from [awx-on-k3s](https://github.com/kurokobo/awx-on-k3s)
+
 ## System requirements
 - One of following Linux distributions.
   - alpine-virt-3.16.0-x86_64.iso
