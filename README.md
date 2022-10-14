@@ -78,7 +78,7 @@ kubectl apply -k awx-operator
 export AWX_HOST="awx-k3s.demo.local"
 envsubst < awx/awx.yml.tmpl > awx/awx.yml
 ```
-* Note: Default password for user **admin** is **admin@F5demo.com**. You can change it in **awx/kustomization.yaml** file.
+* Note: Default password for user **admin** is **`admin@F5demo.com`**. You can change it in **awx/kustomization.yaml** file.
 
 #### Create Certificate for HTTPS
 
