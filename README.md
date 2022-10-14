@@ -1,11 +1,13 @@
-# alpine-k3s-awx
+# k3s-awx
 
 ## System requirements
-- An Alpine linux 3 or later (tested with alpine-virt-3.16.0-x86_64.iso)
+- An Alpine linux 3 or later. tested with :
+  - alpine-virt-3.16.0-x86_64.iso
+  - ubuntu 20.04 LTS
 - At least 80G of disk space and 8G of memory are recommended
 - An internet connection
 
-## Install k3s requirements
+### Alpine Linux - Install k3s requirements
 
 Install packages requirements
 ```
@@ -32,6 +34,13 @@ update-extlinux
 reboot
 ```
 
+### Ubuntu - Install k3s requirements
+
+Install packages requirements
+```
+apt install git
+```
+
 ## Install k3s
 
 ```
@@ -48,25 +57,12 @@ cd alpine-k3s-awx/
 
 ### Install AWX Operator
 
-Edit awx-operator/kustomization.yaml file and change operator version in resource URL and in image NewTag.
+create awx-operator/kustomization.yaml file from template:
 
 ```
----
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+export AWX_OPERATOR_VERSION=0.30.0
+envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
 
-resources:
-  # Find the latest tag here: https://github.com/ansible/awx-operator/releases
-  - github.com/ansible/awx-operator/config/default?ref=0.26.0             👈👈👈
-
-
-# Set the image tags to match the git version from above
-images:
-  - name: quay.io/ansible/awx-operator
-    newTag: 0.26.0                                                        👈👈👈
-
-# Specify a custom namespace in which to install AWX
-namespace: awx
 ```
 
 Apply the installation
@@ -77,23 +73,18 @@ kubectl apply -k awx-operator
 
 ### Install AWX
 
-Change current context to namespace awx:
-
-```
-kubectl config set-context --current --namespace=awx
-```
-
 Edit awx/kustomization.yaml file and change admin password and hostname.
 
 ```
-
+export AWX_HOST="awx-k3s.demo.local"
+envsubst < awx/awx.yml.tmpl > awx/awx.yml
 ```
 
 
 Create Certificate for HTTPS
 
 ```
-AWX_HOST="awx-k3s.demo.local"
+export AWX_HOST="awx-k3s.demo.local"
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
 ```
 
@@ -101,4 +92,12 @@ Apply AWX installation
 
 ```
 kubectl apply -k awx
+```
+
+### Usefull operations
+
+Change current context to namespace awx:
+
+```
+kubectl config set-context --current --namespace=awx
 ```
