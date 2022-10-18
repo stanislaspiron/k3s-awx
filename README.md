@@ -49,6 +49,16 @@ apt install git
 curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
 ```
 
+
+### Proxy Configuration
+If k3s is behind a proxy, add following lines in **`/etc/systemd/system/k3s.service.env`**
+
+```
+HTTP_PROXY="http://192.168.10.1:3128“
+HTTPS_PROXY="http://192.168.10.1:3128“
+NO_PROXY="localhost,127.0.0.0/8,0.0.0.0,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,internal.example.com” 
+```
+
 ## AWX Installation
 
 ### Download this repo
