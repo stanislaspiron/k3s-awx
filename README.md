@@ -38,15 +38,21 @@ reboot
 
 ### Ubuntu - Install k3s requirements
 
+Update system
+```
+sudo apt update && sudo apt -y upgrade
+[ -f /var/run/reboot-required ] && sudo reboot -f
+```
+
 Install packages requirements
 ```
-apt install git
+sudo apt install git
 ```
 
 ## Install k3s
 
 ```
-curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+curl -sfL https://get.k3s.io | sudo sh -s - --write-kubeconfig-mode 644
 ```
 
 
@@ -72,8 +78,8 @@ cd alpine-k3s-awx/
 #### create awx-operator/kustomization.yaml file from template:
 
 ```
-export AWX_OPERATOR_VERSION=0.30.0
-envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
+#export AWX_OPERATOR_VERSION=1.0.0
+AWX_OPERATOR_VERSION=1.0.0 envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
 ```
 
 #### Apply the installation
@@ -87,16 +93,16 @@ kubectl apply -k awx-operator
 #### Edit awx/kustomization.yaml file and change admin password and hostname.
 
 ```
-export AWX_HOST="awx-k3s.demo.local"
-envsubst < awx/awx.yml.tmpl > awx/awx.yml
+#export AWX_HOST="awx-k3s.demo.local"
+AWX_HOST="awx-k3s.demo.local" envsubst < awx/awx.yml.tmpl > awx/awx.yml
 ```
 * Note: Default password for user **admin** is **`admin@F5demo.com`**. You can change it in **awx/kustomization.yaml** file.
 
 #### Create Certificate for HTTPS
 
 ```
-export AWX_HOST="awx-k3s.demo.local"
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
+#export AWX_HOST="awx-k3s.demo.local"
+AWX_HOST="awx-k3s.demo.local" openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
 ```
 
 #### Apply AWX installation
