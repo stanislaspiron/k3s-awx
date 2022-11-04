@@ -71,7 +71,7 @@ NO_PROXY="localhost,127.0.0.0/8,0.0.0.0,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,
 
 ### Download this repo
 ```
-git clone https://github.com/stanislaspiron/alpine-k3s-awx.git
+git clone https://github.com/stanislaspiron/k3s-awx.git
 cd alpine-k3s-awx/
 ```
 
