@@ -7,6 +7,7 @@ Note: some parts of this solution are from:
 ## System requirements
 - One of following Linux distributions.
   - ubuntu 20.04 LTS - [Ubuntu requirements](k3s-ubuntu-requirements.md)
+  - ubuntu 22.04 LTS - [Ubuntu requirements](k3s-ubuntu-requirements.md)
   - ~~alpine-virt-3.16.0-x86_64.iso - [Alpine requirements](k3s-alpine-requirements.md)~~
 - At least 80G of disk space and 8G of memory are recommended
 - An internet connection
