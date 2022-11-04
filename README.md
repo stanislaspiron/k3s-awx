@@ -1,6 +1,8 @@
 # k3s-awx
 
-Note: some parts of this solution are from [awx-on-k3s](https://github.com/kurokobo/awx-on-k3s)
+Note: some parts of this solution are from:
+- [awx-on-k3s](https://github.com/kurokobo/awx-on-k3s)
+- [How To Install Ansible AWX on Ubuntu 20.04|18.04](https://computingforgeeks.com/how-to-install-ansible-awx-on-ubuntu-linux/)
 
 ## System requirements
 - One of following Linux distributions.
