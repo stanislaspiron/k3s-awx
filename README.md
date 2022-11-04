@@ -6,8 +6,8 @@ Note: some parts of this solution are from:
 
 ## System requirements
 - One of following Linux distributions.
-  - alpine-virt-3.16.0-x86_64.iso - [Alpine requirements](k3s-alpine-requirements.md)
   - ubuntu 20.04 LTS - [Ubuntu requirements](k3s-ubuntu-requirements.md)
+  - ~~alpine-virt-3.16.0-x86_64.iso - [Alpine requirements](k3s-alpine-requirements.md)~~
 - At least 80G of disk space and 8G of memory are recommended
 - An internet connection
 
@@ -40,7 +40,6 @@ cd k3s-awx/
 #### create awx-operator/kustomization.yaml file from template:
 
 ```
-#export AWX_OPERATOR_VERSION=1.0.0
 AWX_OPERATOR_VERSION=1.0.0 envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
 ```
 
@@ -55,7 +54,6 @@ kubectl apply -k awx-operator
 #### Edit awx/kustomization.yaml file and change admin password and hostname.
 
 ```
-#export AWX_HOST="awx-k3s.demo.local"
 AWX_HOST="awx-k3s.demo.local" envsubst < awx/awx.yml.tmpl > awx/awx.yml
 ```
 * Note: Default password for user **admin** is **`admin@F5demo.com`**. You can change it in **awx/kustomization.yaml** file.
@@ -63,8 +61,8 @@ AWX_HOST="awx-k3s.demo.local" envsubst < awx/awx.yml.tmpl > awx/awx.yml
 #### Create Certificate for HTTPS
 
 ```
-#export AWX_HOST="awx-k3s.demo.local"
-AWX_HOST="awx-k3s.demo.local" openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
+export AWX_HOST="awx-k3s.demo.local"
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
 ```
 
 #### Apply AWX installation
