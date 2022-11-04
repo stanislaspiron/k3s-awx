@@ -6,50 +6,10 @@ Note: some parts of this solution are from:
 
 ## System requirements
 - One of following Linux distributions.
-  - alpine-virt-3.16.0-x86_64.iso
-  - ubuntu 20.04 LTS
+  - alpine-virt-3.16.0-x86_64.iso - [Alpine requirements](k3s-alpine-requirements.md)
+  - ubuntu 20.04 LTS - [Ubuntu requirements](k3s-ubuntu-requirements.md)
 - At least 80G of disk space and 8G of memory are recommended
 - An internet connection
-
-### Alpine Linux - Install k3s requirements
-
-Install packages requirements
-```
-apk add curl git bash
-```
-Configure Alpine Linux to support k3s
-
-```
-echo "cgroup /sys/fs/cgroup cgroup defaults 0 0" >> /etc/fstab
-cat > /etc/cgconfig.conf <<EOF
-mount {
-  cpuacct = /cgroup/cpuacct;
-  memory = /cgroup/memory;
-  devices = /cgroup/devices;
-  freezer = /cgroup/freezer;
-  net_cls = /cgroup/net_cls;
-  blkio = /cgroup/blkio;
-  cpuset = /cgroup/cpuset;
-  cpu = /cgroup/cpu;
-}
-EOF
-sed -i 's/default_kernel_opts="pax_nouderef quiet rootfstype=ext4"/default_kernel_opts="pax_nouderef quiet rootfstype=ext4 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory"/g' /etc/update-extlinux.conf
-update-extlinux
-reboot
-```
-
-### Ubuntu - Install k3s requirements
-
-Update system
-```
-sudo apt update && sudo apt -y upgrade
-[ -f /var/run/reboot-required ] && sudo reboot -f
-```
-
-Install packages requirements
-```
-sudo apt install git
-```
 
 ## Install k3s
 
