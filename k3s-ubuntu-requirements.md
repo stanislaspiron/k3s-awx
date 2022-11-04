@@ -1,7 +1,4 @@
-
-```
-
-### Ubuntu - Install k3s requirements
+# Ubuntu - Install k3s requirements
 
 Update system
 ```
