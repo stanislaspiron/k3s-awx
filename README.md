@@ -41,7 +41,7 @@ cd k3s-awx/
 #### create awx-operator/kustomization.yaml file from template:
 
 ```
-AWX_OPERATOR_VERSION=1.0.0 envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
+AWX_OPERATOR_VERSION=$(curl -s https://api.github.com/repos/ansible/awx-operator/releases/latest | awk -F '[",]' '/tag_name/{print $4}') envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
 ```
 
 #### Apply the installation
