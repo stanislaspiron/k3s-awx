@@ -74,8 +74,28 @@ kubectl apply -k awx
 
 ### Usefull operations
 
-Change current context to namespace awx:
+#### Change current context to namespace awx:
 
 ```
 kubectl config set-context --current --namespace=awx
+```
+
+#### Find project directory on host
+
+```
+# kubectl get pvc -n awx awx-projects-claim
+NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+awx-projects-claim   Bound    pvc-ba714636-15d9-4789-bcf8-3cb530d809b7   8Gi        RWO            local-path     8d
+```
+
+project directory is 
+
+```
+/var/lib/rancher/k3s/storage/<volume>_<namespace>_<pvc name>
+```
+
+In the example, project directory is:
+
+```
+/var/lib/rancher/k3s/storage/pvc-ba714636-15d9-4789-bcf8-3cb530d809b7_awx_awx-projects-claim/
 ```
