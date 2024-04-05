@@ -14,7 +14,7 @@ Note: some parts of this solution are from:
 
 ## Install k3s
 
-```
+```console
 curl -sfL https://get.k3s.io | sudo sh -s - --write-kubeconfig-mode 644
 ```
 
@@ -22,7 +22,11 @@ curl -sfL https://get.k3s.io | sudo sh -s - --write-kubeconfig-mode 644
 Some organisation run too many kubernetes / docker servers sharing same SNAT IP. in this case, following message appears un pod events:
 
 ```
-Warning  Failed     9s (x2 over 28s)   kubelet            Failed to pull image "docker.io/redis:7": failed to pull and unpack image "docker.io/library/redis:7": failed to copy: httpReadSeeker: failed open: unexpected status code https://registry-1.docker.io/v2/library/redis/manifests/sha256:3134997edb04277814aa51a4175a588d45eb4299272f8eff2307bbf8b39e4d43: 429 Too Many Requests - Server message: toomanyrequests: You have reached your pull rate limit. You may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit
+Warning  Failed     9s (x2 over 28s)   kubelet            Failed to pull image "docker.io/redis:7":
+failed to pull and unpack image "docker.io/library/redis:7": failed to copy: httpReadSeeker: failed open: unexpected status code
+https://registry-1.docker.io/v2/library/redis/manifests/sha256:3134997edb04277814aa51a4175a588d45eb4299272f8eff2307bbf8b39e4d43:
+429 Too Many Requests - Server message: toomanyrequests:
+You have reached your pull rate limit. You may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit
 ```
 
 To prevent this error, you must configure containerd service to authenticate before downloading docker images:
@@ -30,7 +34,7 @@ To prevent this error, you must configure containerd service to authenticate bef
 2. Create a docker hub token in your acount security parameters [https://hub.docker.com/settings/security](https://hub.docker.com/settings/security)
 3. add following lines in **`/etc/rancher/k3s/registries.yaml`**
 
-```
+```yaml
 configs:
   registry-1.docker.io:
     auth:
@@ -50,7 +54,7 @@ NO_PROXY="localhost,127.0.0.0/8,0.0.0.0,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,
 ## AWX Installation
 
 ### Download this repo
-```
+```console
 git clone https://github.com/stanislaspiron/k3s-awx.git
 cd k3s-awx/
 ```
@@ -59,13 +63,13 @@ cd k3s-awx/
 
 #### create awx-operator/kustomization.yaml file from template:
 
-```
+```console
 AWX_OPERATOR_VERSION=$(curl -s https://api.github.com/repos/ansible/awx-operator/releases/latest | awk -F '[",]' '/tag_name/{print $4}') envsubst < awx-operator/kustomization.yaml.tmpl > awx-operator/kustomization.yaml
 ```
 
 #### Apply the installation
 
-```
+```console
 kubectl apply -k awx-operator
 ```
 
@@ -73,21 +77,21 @@ kubectl apply -k awx-operator
 
 #### Edit awx/kustomization.yaml file and change admin password and hostname.
 
-```
+```console
 AWX_HOST="awx-k3s.demo.local" envsubst < awx/awx.yml.tmpl > awx/awx.yml
 ```
 * Note: Default password for user **admin** is **`admin@F5demo.com`**. You can change it in **awx/kustomization.yaml** file.
 
 #### Create Certificate for HTTPS
 
-```
+```console
 export AWX_HOST="awx-k3s.demo.local"
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out ./awx/tls.crt -keyout ./awx/tls.key -subj "/CN=${AWX_HOST}/O=${AWX_HOST}" -addext "subjectAltName = DNS:${AWX_HOST}"
 ```
 
 #### Apply AWX installation
 
-```
+```console
 kubectl apply -k awx
 ```
 
@@ -95,21 +99,23 @@ kubectl apply -k awx
 
 #### Change current context to namespace awx:
 
-```
+```console
 kubectl config set-context --current --namespace=awx
 ```
 
 #### Find project directory on host
 
+```console
+kubectl get pvc -n awx awx-projects-claim
 ```
-# kubectl get pvc -n awx awx-projects-claim
+```
 NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 awx-projects-claim   Bound    pvc-ba714636-15d9-4789-bcf8-3cb530d809b7   8Gi        RWO            local-path     8d
 ```
 
 project directory is 
 
-```
+```console
 /var/lib/rancher/k3s/storage/<volume>_<namespace>_<pvc name>
 ```
 
