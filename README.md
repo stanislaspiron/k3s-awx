@@ -18,6 +18,25 @@ Note: some parts of this solution are from:
 curl -sfL https://get.k3s.io | sudo sh -s - --write-kubeconfig-mode 644
 ```
 
+### Docker hub authentication
+Some organisation run too many kubernetes / docker servers sharing same SNAT IP. in this case, following message appears un pod events:
+
+```
+Warning  Failed     9s (x2 over 28s)   kubelet            Failed to pull image "docker.io/redis:7": failed to pull and unpack image "docker.io/library/redis:7": failed to copy: httpReadSeeker: failed open: unexpected status code https://registry-1.docker.io/v2/library/redis/manifests/sha256:3134997edb04277814aa51a4175a588d45eb4299272f8eff2307bbf8b39e4d43: 429 Too Many Requests - Server message: toomanyrequests: You have reached your pull rate limit. You may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit
+```
+
+To prevent this error, you must configure containerd service to authenticate before downloading docker images:
+1. create an docker hub account : [https://hub.docker.com/signup](https://hub.docker.com/signup)
+2. Create a docker hub token in your acount security parameters [https://hub.docker.com/settings/security](https://hub.docker.com/settings/security)
+3. add following lines in **`/etc/rancher/k3s/registries.yaml`**
+
+```
+configs:
+  registry-1.docker.io:
+    auth:
+      username: your_docker_username
+      password: your_docker_token
+```
 
 ### Proxy Configuration
 If k3s is behind a proxy, add following lines in **`/etc/systemd/system/k3s.service.env`**
