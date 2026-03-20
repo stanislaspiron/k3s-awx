@@ -12,5 +12,21 @@ images:
   - name: quay.io/ansible/awx-operator
     newTag: ${AWX_OPERATOR_VERSION}
 
+patches:
+  - target:
+      kind: Deployment
+      name: awx-operator-controller-manager
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: awx-operator-controller-manager
+      spec:
+        template:
+          spec:
+            containers:
+            - name: kube-rbac-proxy
+              image: quay.io/brancz/kube-rbac-proxy:v0.15.0
+
 # Specify a custom namespace in which to install AWX
 namespace: awx
